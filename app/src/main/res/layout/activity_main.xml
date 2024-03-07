@@ -8,9 +8,117 @@
     tools:context=".MainActivity">
 
     <TextView
+        android:id="@+id/tvJackPotTotal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        tools:layout_editor_absoluteY="148dp" />
+        android:text="Current Jackpot :"
+        android:textSize="20sp"
+        tools:layout_editor_absoluteX="110dp"
+        tools:layout_editor_absoluteY="138dp" />
+
+    <Button
+        android:id="@+id/RolleDiceButton"
+        android:layout_width="110dp"
+        android:layout_height="64dp"
+        android:text="Roll Die"
+        tools:layout_editor_absoluteX="148dp"
+        tools:layout_editor_absoluteY="408dp" />
+
+    <TextView
+        android:id="@+id/currentplayer"
+        android:layout_width="30dp"
+        android:layout_height="25dp"
+        android:text="p1"
+        android:textSize="20sp"
+        tools:layout_editor_absoluteX="260dp"
+        tools:layout_editor_absoluteY="85dp" />
+
+    <TextView
+        android:id="@+id/currentplayer"
+        android:layout_width="30dp"
+        android:layout_height="25dp"
+        android:text="0"
+        android:textSize="20sp"
+        tools:layout_editor_absoluteX="365dp"
+        tools:layout_editor_absoluteY="27dp" />
+
+    <TextView
+        android:id="@+id/tvMathProblem"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Rolle die to start :"
+        android:textSize="20sp"
+        tools:layout_editor_absoluteX="25dp"
+        tools:layout_editor_absoluteY="526dp" />
+
+    <TextView
+        android:id="@+id/currentplayer"
+        android:layout_width="30dp"
+        android:layout_height="25dp"
+        android:textSize="20sp"
+        tools:layout_editor_absoluteX="281dp"
+        tools:layout_editor_absoluteY="138dp"
+        tools:text="0" />
+
+    <TextView
+        android:id="@+id/tvplayer1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Player 1 Total :"
+        android:textSize="20sp"
+        android:visibility="visible"
+        tools:layout_editor_absoluteX="16dp"
+        tools:layout_editor_absoluteY="25dp" />
+
+    <TextView
+        android:id="@+id/tvMathProblem"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Player 2 Total :"
+        android:textSize="20sp"
+        tools:layout_editor_absoluteX="223dp"
+        tools:layout_editor_absoluteY="25dp" />
+
+    <TextView
+        android:id="@+id/totalpoints1"
+        android:layout_width="30dp"
+        android:layout_height="25dp"
+        android:text="0"
+        android:textSize="20sp"
+        tools:layout_editor_absoluteX="159dp"
+        tools:layout_editor_absoluteY="27dp" />
+
+    <TextView
+        android:id="@+id/tvJackPotTotal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Current Player :"
+        android:textSize="20sp"
+        tools:layout_editor_absoluteX="110dp"
+        tools:layout_editor_absoluteY="83dp" />
+
+    <Button
+        android:id="@+id/RolleDiceButton"
+        android:layout_width="110dp"
+        android:layout_height="64dp"
+        android:text="Guess"
+        tools:layout_editor_absoluteX="150dp"
+        tools:layout_editor_absoluteY="589dp" />
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="190dp"
+        android:layout_height="196dp"
+        app:srcCompat="@drawable/die"
+        tools:layout_editor_absoluteX="110dp"
+        tools:layout_editor_absoluteY="190dp" />
+
+    <TextView
+        android:id="@+id/PlayerAnswer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="_____________"
+        tools:layout_editor_absoluteX="220dp"
+        tools:layout_editor_absoluteY="533dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
