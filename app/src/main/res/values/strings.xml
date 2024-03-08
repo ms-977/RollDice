@@ -1,3 +1,13 @@
 <resources>
     <string name="app_name">RollDice</string>
+    <string name="Player1_label">Player 1 Total :</string>
+    <string name="Player2_label">Player 2 Total :</string>
+    <string name="current_player">Current Player :</string>
+    <string name="current_Jackpot">Current Jackpot :</string>
+    <string name="roll_die_button">Roll Die</string>
+    <string name="math_problem">Press Roll Die to start</string>
+    <string name="guess_button">Guess</string>
+    <string name="player1_score">0</string>
+    <string name="player2_score">0</string>
+
 </resources>
