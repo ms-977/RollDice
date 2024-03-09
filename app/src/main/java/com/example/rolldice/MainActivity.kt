@@ -1,6 +1,7 @@
 package com.example.rolldice
-import android.view.View
+
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.example.rolldice.databinding.ActivityMainBinding
 import kotlin.properties.Delegates
@@ -17,34 +18,33 @@ class MainActivity : AppCompatActivity() {
     }
     private var expectedAnswer by Delegates.notNull<Int>()
     private var mainscore = 0
-    private var score1 = 0
-    private var score2 = 0
-    private var currentJackpot = 5
+    private var totalScore1 = 0
+    private var totalScore2 = 0
+    private var curJackpot = 5
     private var currentPlayer = "P1"
-    private var gotjackpot = false
-    private var gotdouble = false
-    private val winingscore = 20
+    private var gotJackpot = false
+    private val winningScore = 20
 
     private val rollDieButtonClickListener = View.OnClickListener {
         val dieNumber = rollDie()
         val problemInfo = when (dieNumber) {
-            1, 2, 3 -> generateProblemText(dieNumber, getSymbol(dieNumber))
+            in 1..3 -> generateProblemText(dieNumber, getSymbol(dieNumber))
             4 -> {
-                gotdouble = true
-                Triple(0, 0, "Roll again for 2x points")
+                gotJackpot = true
+                Triple(0, 0, "Roll again to try for jackpot")
             }
             5 -> {
                 handleLoseTurn()
                 return@OnClickListener
             }
             6 -> {
-                gotjackpot = true
+                gotJackpot = true
                 Triple(0, 0, "Roll again to try for jackpot")
             }
             else -> Triple(0, 0, "")
         }
 
-        binding.mathproblem.text = problemInfo.third
+        updateUI(problemInfo.third)
     }
 
     private fun getSymbol(operation: Int): String {
@@ -55,6 +55,7 @@ class MainActivity : AppCompatActivity() {
             else -> ""
         }
     }
+
     private val guessButtonClickListener = View.OnClickListener {
         val curAnswer = binding.answercontainer.text.toString()
 
@@ -64,14 +65,18 @@ class MainActivity : AppCompatActivity() {
             handleWrongGuess()
         }
 
-        //resetGameValues()
         checkWinner()
     }
 
+    private fun updateUI(message: String) {
+        setAllGameValues()
+        binding.mathproblem.text = message
+    }
+
     private fun setAllGameValues() {
-        binding.tvtotalpoints1.text = score1.toString()
-        binding.tvtotalpoints2.text = score2.toString()
-        binding.jackpotamount.text = currentJackpot.toString()
+        binding.tvtotalpoints1.text = totalScore1.toString()
+        binding.tvtotalpoints2.text = totalScore2.toString()
+        binding.jackpotamount.text = curJackpot.toString()
         binding.currentplayervalue.text = currentPlayer
     }
 
@@ -83,7 +88,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun generateProblemText(operation: Int, symbol: String): Triple<Int, Int, String> {
         val maxRange = when (operation) {
-            1, 2 -> 100
+            in 1..2 -> 100
             3 -> 20
             else -> 0
         }
@@ -100,59 +105,72 @@ class MainActivity : AppCompatActivity() {
 
         return Triple(num1, num2, "$num1 $symbol $num2 = ")
     }
+
     private fun handleLoseTurn() {
-        mainscore = 0
-        gotdouble = false
-        gotjackpot = false
+        gotJackpot = false
         switchPlayer()
-        setAllGameValues()
-        binding.mathproblem.text = "You Lose!  " +currentPlayer+"turn"
+        updateUI("You Lose! $currentPlayer turn")
     }
 
     private fun handleCorrectGuess() {
         addPoints()
         switchPlayer()
-        binding.mathproblem.text = "Correct!" + currentPlayer+"turn"
+        updateUI("Correct! $currentPlayer turn")
     }
 
     private fun handleWrongGuess() {
-        currentJackpot += mainscore
+        curJackpot += mainscore
         switchPlayer()
-        binding.mathproblem.text = "Wrong Guess!"+ currentPlayer+"turn"
+        updateUI("Wrong Guess! $currentPlayer turn")
     }
 
     private fun addPoints() {
-        when {
-            currentPlayer == "P1" -> score1 += mainscore
-            gotjackpot -> score1 += currentJackpot
-            else -> score2 += mainscore
+        // Determine the correct player's total score
+        val currentPlayerScore = if (currentPlayer == "P1") totalScore1 else totalScore2
+
+        // Generate a random problem (1 for addition, 2 for subtraction, 3 for multiplication)
+        val problemType = Random.nextInt(1, 4)
+
+        // Generate the problem text and get the expected answer
+        val (num1, num2, problemText) = generateProblemText(problemType, getSymbol(problemType))
+
+        // Update the player's score based on the type of problem
+        val pointsToAdd = when (problemType) {
+            1 -> 1 // Addition problem, add 1 point
+            2 -> 2 // Subtraction problem, add 2 points
+            3 -> 3 // Multiplication problem, add 3 points
+            else -> 0 // Default case
         }
 
-        if (gotjackpot) {
-            if (currentPlayer == "P1") {
-                score1 += currentJackpot
-            } else {
-                score2 += currentJackpot
-            }
+        // Update the player's score, considering the jackpot
+        val updatedScore = currentPlayerScore + pointsToAdd
 
-            currentJackpot = 5
+        // Update the total score for the current player
+        if (currentPlayer == "P1") {
+            totalScore1 = updatedScore
+        } else {
+            totalScore2 = updatedScore
         }
+
+        // Display the problem text
+        updateUI(problemText)
+
+        // Reset mainscore for the next round
+        mainscore = 0
     }
 
     private fun switchPlayer() {
         currentPlayer = if (currentPlayer == "P1") "P2" else "P1"
     }
 
-
-
     private fun checkWinner() {
         when {
-            score1 >= winingscore -> {
-                binding.mathproblem.text = "Player 1 Wins!"
+            totalScore1 >= winningScore -> {
+                updateUI("Player 1 Wins!")
                 disableButtons()
             }
-            score2 >= winingscore -> {
-                binding.mathproblem.text = "Player 2 Wins!"
+            totalScore2 >= winningScore -> {
+                updateUI("Player 2 Wins!")
                 disableButtons()
             }
         }
@@ -165,7 +183,6 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
